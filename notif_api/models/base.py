@@ -9,7 +9,6 @@ def orjson_dumps(v, *, default):
 
 
 class AbstractModel(BaseModel):
-    id: str
 
     class Meta:
         # Replace default lib for json to faster orjson

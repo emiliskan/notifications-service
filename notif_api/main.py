@@ -21,7 +21,7 @@ app = FastAPI(
 async def startup():
     pass
 
-app.include_router(notifier.router, prefix="/v1/", tags=["Notifier"])
+app.include_router(notifier.router, prefix="/v1", tags=["Notifier"])
 
 
 @app.on_event("shutdown")
