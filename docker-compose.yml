@@ -18,10 +18,10 @@ services:
     <<: *x-env
 
   worker:
-    build: ./notif_api
-    command: celery -A db worker --loglevel=info
+    build: ./senders
+    command: celery -A sender_worker worker --loglevel=info
     volumes:
-      - ./notif_api:/app
+      - ./senders:/app
     depends_on:
       - notif-api
       - rabbit
