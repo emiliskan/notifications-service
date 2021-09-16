@@ -1,0 +1,2 @@
+CELERY_BROKER_URL=pyamqp://user:bitnami@rabbit//
+RABBITMQ_PASSWORD=bitnami
