@@ -1,0 +1,34 @@
+version: '3.8'
+
+x-env: &x-env
+  env_file:
+  - env
+
+services:
+
+  notif-api:
+    build: ./notif_api
+    ports:
+      - 8000:8000
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    volumes:
+      - ./notif_api:/app
+    depends_on:
+      - rabbit
+    <<: *x-env
+
+  worker:
+    build: ./notif_api
+    command: celery -A db worker --loglevel=info
+    volumes:
+      - ./notif_api:/app
+    depends_on:
+      - notif-api
+      - rabbit
+    <<: *x-env
+
+  rabbit:
+    image: bitnami/rabbitmq:latest
+    ports:
+      - 5672:5672
+    <<: *x-env

@@ -1,3 +1,5 @@
 __pycache__/
 .idea/
 flake-report/
+
+test.py
