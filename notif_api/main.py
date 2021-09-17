@@ -1,13 +1,14 @@
 import logging
 
 import uvicorn
+from celery import Celery
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from api.v1 import notifier
 from core import config
 from core.logger import LOGGING
-
+from db import celery_app
 
 app = FastAPI(
     title=config.PROJECT_NAME,
@@ -19,7 +20,8 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    pass
+    celery_app.app = Celery('senders', broker=config.CELERY_BROKER_URL)
+
 
 app.include_router(notifier.router, prefix="/v1", tags=["Notifier"])
 
