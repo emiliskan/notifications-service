@@ -1,6 +1,7 @@
 from celery_app import app
+from senders.notificators.email import EmailNotificator
 
 
 @app.task(name="send_email", acks_late=True)
 def send_email(to: any, data: any):
-    print("Sended email")
+    EmailNotificator(to, data).send()
