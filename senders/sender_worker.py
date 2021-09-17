@@ -1,5 +1,5 @@
 from celery_app import app
-from senders.notificators.email import EmailNotificator
+from notificators.email import EmailNotificator
 
 
 @app.task(name="send_email", acks_late=True)

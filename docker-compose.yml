@@ -17,11 +17,45 @@ services:
       - rabbit
     <<: *x-env
 
+  notif-admin:
+    build: ./admin
+    command: >
+      sh -c "
+      gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload --access-logfile - --error-logfile"
+    ports:
+      - "8001:80"
+    volumes:
+      - ./admin:/app/
+    depends_on:
+      - notif-admin-db
+      - notif-api
+    <<: *x-env
+
+  notif-admin-db:
+    restart: unless-stopped
+    container_name: notif-admin-db
+    image: library/postgres:13.2
+    ports:
+    - "5432:5432"
+    volumes:
+    - postgresdata:/var/lib/postgresql/data
+    <<: *x-env
+
   worker:
     build: ./senders
     command: celery -A sender_worker worker --loglevel=info
     volumes:
       - ./senders:/app
+    depends_on:
+      - notif-api
+      - rabbit
+    <<: *x-env
+  scheduler:
+    build: ./senders
+    command: celery -A sender_worker beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./senders:/app
+      - ./admin:/admin
     depends_on:
       - notif-api
       - rabbit
@@ -32,3 +66,6 @@ services:
     ports:
       - 5672:5672
     <<: *x-env
+
+volumes:
+  postgresdata:

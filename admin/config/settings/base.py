@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
     'notify',
 ]
 
@@ -81,11 +82,11 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=public'
         },
-        'NAME': os.environ.get('DJANGO_POSTGRES_DBNAME', 'notify'),
-        'USER': os.environ.get('DJANGO_POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DJANGO_POSTGRES_PASSWORD', 'password'),
-        'HOST': os.environ.get('DJANGO_POSTGRES_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DJANGO_POSTGRES_PORT', 5432),
+        'NAME': os.environ.get('POSTGRES_DBNAME', 'postgres'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '94c3b047-d080-4b77-bd10-8cafea78e828'),
+        'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('POSTGRES_PORT', 5432),
     }
 }
 
