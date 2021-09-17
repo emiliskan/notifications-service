@@ -9,7 +9,7 @@ services:
   notif-api:
     build: ./notif_api
     ports:
-      - 8000:8000
+      - "8000:8000"
     command: uvicorn main:app --host 0.0.0.0 --reload
     volumes:
       - ./notif_api:/app
@@ -28,7 +28,7 @@ services:
     <<: *x-env
 
   rabbit:
-    image: bitnami/rabbitmq:latest
+    image: rabbitmq:latest
     ports:
       - 5672:5672
     <<: *x-env
