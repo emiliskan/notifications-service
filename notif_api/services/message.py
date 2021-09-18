@@ -12,7 +12,7 @@ class MessageService:
         self.celery = celery
 
     async def send(self, message: Message) -> None:
-        self.celery.send_task("send_email", kwargs=message.dict())
+        self.celery.send_task(message.channel, kwargs=message.dict())
 
 
 @lru_cache(maxsize=128)

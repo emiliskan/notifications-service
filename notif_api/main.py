@@ -20,7 +20,7 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup():
-    celery_app.app = Celery('senders', broker=config.CELERY_BROKER_URL)
+    celery_app.app = Celery("senders", broker=config.CELERY_BROKER_URL)
 
 
 app.include_router(notifier.router, prefix="/v1", tags=["Notifier"])
