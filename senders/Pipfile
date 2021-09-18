@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 celery = "*"
 flower = "*"
+jinja2 = "*"
 
 [dev-packages]
 
