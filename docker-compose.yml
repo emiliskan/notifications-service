@@ -38,24 +38,15 @@ services:
     - postgresdata:/var/lib/postgresql/data
     <<: *x-env
 
-  worker:
-    build: ./senders
-    command: celery -A sender_worker worker --loglevel=info
+  celery:
+    build: ./admin
     volumes:
-      - ./senders:/app
-    depends_on:
-      - notif-api
-      - rabbit
-    <<: *x-env
-  scheduler:
-    build: ./senders
-    command: celery -A sender_worker beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ./senders:/app
       - ./admin:/admin
     depends_on:
       - notif-api
       - rabbit
+    environment:
+      - WORKER_CONTAINER=TRUE
     <<: *x-env
 
   rabbit:

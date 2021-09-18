@@ -1,4 +1,4 @@
-from notificators.base import BaseNotificator
+from notify.notificators.base import BaseNotificator
 
 
 class EmailNotificator(BaseNotificator):
