@@ -1,4 +1,4 @@
-FROM python:3.8.3-alpine
+FROM python:3.9-alpine
 WORKDIR /usr/app
 
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -15,9 +15,9 @@ COPY ./entrypoint.sh .
 
 COPY . .
 
-EXPOSE 80
+EXPOSE 8001
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/app/entrypoint.sh"]
 
-CMD gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload
+CMD gunicorn --bind 0.0.0.0:8001 config.wsgi:application

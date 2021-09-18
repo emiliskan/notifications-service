@@ -20,9 +20,10 @@ services:
   notif-admin:
     build: ./admin
     ports:
-      - "8001:80"
+      - "8001:8001"
     volumes:
       - ./admin:/app/
+      - static_volume:/usr/app/config/static:ro
     depends_on:
       - notif-admin-db
     <<: *x-env
@@ -65,3 +66,4 @@ services:
 
 volumes:
   postgresdata:
+  static_volume:
