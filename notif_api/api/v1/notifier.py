@@ -2,18 +2,17 @@ import logging
 
 from fastapi import APIRouter, Depends
 
-from models.email import Email
-from services.email import get_email_service, EmailService
+from models import Message
+from services.message import get_message_service, MessageService
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.post("/email/send/",
-             summary="Отправить письмо.",
-             )
-async def send_email(
-        email_data: Email,
-        service: EmailService = Depends(get_email_service),
+@router.post("/send/",
+             summary="Отправить сообщение.")
+async def send(
+        message: Message,
+        service: MessageService = Depends(get_message_service),
 ) -> None:
-    await service.send(email_data)
+    await service.send(message)
