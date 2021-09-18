@@ -19,16 +19,12 @@ services:
 
   notif-admin:
     build: ./admin
-    command: >
-      sh -c "
-      gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload --access-logfile - --error-logfile"
     ports:
       - "8001:80"
     volumes:
       - ./admin:/app/
     depends_on:
       - notif-admin-db
-      - notif-api
     <<: *x-env
 
   notif-admin-db:
