@@ -1,2 +1,9 @@
 CELERY_BROKER_URL=pyamqp://guest:guest@rabbit//
 RABBITMQ_PASSWORD=guest
+
+# POSTGRES
+POSTGRES_DB=notify
+POSTGRES_HOST=notify-admin-db
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+POSTGRES_PASSWORD=password
