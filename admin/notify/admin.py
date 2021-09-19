@@ -22,6 +22,12 @@ class MyAdminSite(admin.AdminSite):
                         "object_name": "send email",
                         "admin_url": "/admin/send_email",
                         "view_only": True,
+                    },
+                    {
+                        "name": "Send periodic emails",
+                        "object_name": "send periodic emails",
+                        "admin_url": "/admin/send_periodic_emails",
+                        "view_only": True,
                     }
                 ],
             }

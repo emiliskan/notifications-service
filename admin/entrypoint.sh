@@ -16,9 +16,5 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 python manage.py createsuperuser --noinput
 
-if [ -z "$WORKER_CONTAINER" ]
-then
-    gunicorn --bind 0.0.0.0:8001 --reload -w 4 config.wsgi:application
-else
-    celery -A notify worker -B -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-fi
+gunicorn --bind 0.0.0.0:8001 --reload -w 4 config.wsgi:application
+
