@@ -1,1 +1,2 @@
-from .email import email_notificator
+from .email import EmailNotificator
+from .sms import SMSNotificator

@@ -39,7 +39,7 @@ services:
 
   worker:
     build: ./senders
-    command: celery -A sender_worker worker --loglevel=info
+    command: celery -A main worker --loglevel=info
     volumes:
       - ./senders:/app
     depends_on:

@@ -8,6 +8,7 @@ celery = "*"
 flower = "*"
 jinja2 = "*"
 gunicorn = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
