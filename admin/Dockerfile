@@ -11,4 +11,7 @@ COPY Pipfile/ /app/
 COPY Pipfile.lock/ /app/
 RUN pipenv install --system --deploy --skip-lock
 
-ENTRYPOINT [ "/opt/app/entrypoint.sh" ]
+# run entrypoint.sh
+COPY ./entrypoint.sh .
+RUN ["chmod", "+x", "./entrypoint.sh"]
+ENTRYPOINT ["sh", "./entrypoint.sh"]

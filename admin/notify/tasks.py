@@ -1,7 +1,7 @@
 from notify.celery import app
-from notify.notificators.email import EmailNotificator
+from notify.notificators.email import email_notificator
 
 
-@app.task(name="send_email", acks_late=True)
-def send_email(to: any, data: any):
-    EmailNotificator(to, data).send()
+@app.task(name="email", acks_late=True)
+def send_email(**kwargs):
+    email_notificator.send(**kwargs)

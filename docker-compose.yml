@@ -7,21 +7,18 @@ x-env: &x-env
 services:
 
   notif-api:
-    build: ./notif_api
+    build: ./notify_api
     ports:
       - "8000:8000"
     command: uvicorn main:app --host 0.0.0.0 --reload
     volumes:
-      - ./notif_api:/app
+      - ./notify_api:/app
     depends_on:
       - rabbit
     <<: *x-env
 
   notif-admin:
     build: ./admin
-    command: >
-      sh -c "
-      gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload --access-logfile - --error-logfile"
     ports:
       - "8001:8001"
     volumes:
@@ -41,22 +38,15 @@ services:
     environment:
       - WORKER_CONTAINER=TRUE
 
-  rabbit:
-    image: rabbitmq:latest
-    ports:
-      - 5672:5672
-    env_file:
-      - env
 
   notify-db:
     image: postgres:13.2-alpine
     ports:
-      - 5432:5432
-    env_file:
-      - env
+      - "5432:5432"
     volumes:
       - postgresdata:/var/lib/postgresql/data
     restart: on-failure
+    <<: *x-env
 
 volumes:
   postgresdata:
