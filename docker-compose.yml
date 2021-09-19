@@ -28,17 +28,6 @@ services:
       - notif-admin-db
     <<: *x-env
 
-  celery:
-    build: ./admin
-    volumes:
-      - ./admin:/admin
-    depends_on:
-      - notif-api
-      - rabbit
-    environment:
-      - WORKER_CONTAINER=TRUE
-
-
   notify-db:
     image: postgres:13.2-alpine
     ports:
@@ -46,6 +35,32 @@ services:
     volumes:
       - postgresdata:/var/lib/postgresql/data
     restart: on-failure
+    <<: *x-env
+
+  worker:
+    build: ./senders
+    command: celery -A sender_worker worker --loglevel=info
+    volumes:
+      - ./senders:/app
+    depends_on:
+      - notif-api
+      - rabbit
+    <<: *x-env
+
+  scheduler:
+    build: ./senders
+    command: celery -A sender_worker beat -l INFO
+    volumes:
+      - ./senders:/app
+    depends_on:
+      - notif-api
+      - rabbit
+    <<: *x-env
+
+  rabbit:
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
     <<: *x-env
 
 volumes:

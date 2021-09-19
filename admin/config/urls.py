@@ -18,7 +18,11 @@ from django.contrib import admin
 from django.urls import path
 
 from config.settings import base
+from notify.admin import admin_site
+from django.views.generic import TemplateView
+
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
 ] + static(base.STATIC_URL, document_root=base.STATIC_ROOT)
