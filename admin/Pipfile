@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+django-celery-beat = "*"
+celery = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
+django-model-utils = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
