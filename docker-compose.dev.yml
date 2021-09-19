@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  notify-api:
+    build: notify_api
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    volumes:
+      - ./notify_api:/app
+    depends_on:
+      - rabbit
+    env_file:
+      - env
+
+  rabbit:
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
+    env_file:
+      - env
+
+#  notify-db:
+#    image: postgres:13.2-alpine
+#    ports:
+#      - 5432:5432
+#    env_file:
+#      - env
+#    volumes:
+#      - postgresdata:/var/lib/postgresql/data
+#    restart: on-failure
+
+volumes:
+  postgresdata:

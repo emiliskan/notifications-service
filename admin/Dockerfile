@@ -1,23 +1,14 @@
-FROM python:3.9-alpine
-WORKDIR /usr/app
+FROM python:3.9
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH "${PYTHONPATH}:/app/"
+ENV PATH="${PATH}:/root/.local/bin"
 
-RUN apk update && \
-    apk add postgresql-dev gcc python3-dev musl-dev && \
-    pip install --upgrade pip
+RUN apt update && apt -y upgrade && apt install -y netcat postgresql-client python3-setuptools && pip install pipenv
 
-COPY ./requirements ./requirements
-RUN pip install -r requirements/production.txt
+RUN mkdir /app
+WORKDIR /app/
+COPY Pipfile/ /app/
+COPY Pipfile.lock/ /app/
+RUN pipenv install --system --deploy --skip-lock
 
-COPY ./entrypoint.sh .
-
-COPY . .
-
-EXPOSE 8001
-
-# run entrypoint.sh
-ENTRYPOINT ["/usr/app/entrypoint.sh"]
-
-CMD gunicorn --bind 0.0.0.0:8001 config.wsgi:application
+ENTRYPOINT [ "/opt/app/entrypoint.sh" ]
