@@ -5,11 +5,11 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-celery-beat = "*"
 celery = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 django-model-utils = "*"
+django-celery-beat = "*"
 
 [dev-packages]
 

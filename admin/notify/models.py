@@ -20,14 +20,11 @@ class MessageTemplate(TimeStampedModel):
 
 class NotifyHistory(TimeStampedModel):
     id = models.UUIDField(_('id'), primary_key=True, default=uuid.uuid4(), editable=False)
-    notification_id = models.CharField(_('название'), max_length=255)
-    description = models.TextField(_('описание'), blank=True)
-    body = models.TextField(_(''), blank=True)
+    notification_id = models.CharField(_('идентификатор оповещения'), max_length=255)
 
     class Meta:
-        verbose_name = _('шаблон')
-        verbose_name_plural = _('шаблоны')
-        db_table = 'message_template'
+        verbose_name = _('история оповещений')
+        verbose_name_plural = _('история оповешений')
 
     def __str__(self):
         return self.title

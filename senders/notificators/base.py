@@ -2,7 +2,7 @@ import abc
 from jinja2 import Template
 
 
-class BaseNotificator:
+class BaseNotificator(abc.ABC):
     def __init__(self, db=None):
         self.db = db
 

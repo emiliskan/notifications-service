@@ -7,6 +7,7 @@ from .base import AbstractModel
 class Service(str, Enum):
     auth = "auth"
     ugc = "ugc"
+    admin = "admin"
 
 
 class Channel(str, Enum):
