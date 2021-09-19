@@ -1,0 +1,19 @@
+CELERY_BROKER_URL=pyamqp://guest:guest@rabbit//
+RABBITMQ_PASSWORD=guest
+
+# POSTGRES
+POSTGRES_DB=postgres
+POSTGRES_HOST=notify-db
+POSTGRES_USER=postgres
+POSTGRES_PORT=5432
+POSTGRES_PASSWORD=password
+
+# ADMIN
+DEBUG=0
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+DATABASE=postgres
+DJANGO_SUPERUSER_PASSWORD=password
+DJANGO_SUPERUSER_USERNAME=user
+DJANGO_SUPERUSER_EMAIL=user@email.com
+DJANGO_SETTINGS_MODULE=config.settings.production
+SECRET_KEY=6s(pz-hu3##6!9u6)g&pf4t%9)d-o3%ggxz0!&)b8gc0k_v3g0
