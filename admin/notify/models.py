@@ -43,6 +43,7 @@ class NotifyHistory(models.Model):
     class Meta:
         verbose_name = _('история оповещений')
         verbose_name_plural = _('история оповещений')
+        db_table = 'message_history'
 
     def __str__(self):
         return self.service
