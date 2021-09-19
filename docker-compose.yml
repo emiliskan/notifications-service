@@ -19,6 +19,9 @@ services:
 
   notif-admin:
     build: ./admin
+    command: >
+      sh -c "
+      gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload --access-logfile - --error-logfile"
     ports:
       - "8001:8001"
     volumes:
@@ -26,16 +29,6 @@ services:
       - static_volume:/usr/app/config/static:ro
     depends_on:
       - notif-admin-db
-    <<: *x-env
-
-  notif-admin-db:
-    restart: unless-stopped
-    container_name: notif-admin-db
-    image: library/postgres:13.2
-    ports:
-    - "5432:5432"
-    volumes:
-    - postgresdata:/var/lib/postgresql/data
     <<: *x-env
 
   celery:
@@ -47,39 +40,6 @@ services:
       - rabbit
     environment:
       - WORKER_CONTAINER=TRUE
-  notify-admin:
-    build: ./admin
-    command: >
-      sh -c "
-      gunicorn config.wsgi:application -t 300 -w 4 -b 0.0.0.0:80 --reload --access-logfile - --error-logfile"
-    ports:
-      - "8001:80"
-    volumes:
-      - ./admin:/app/
-    depends_on:
-      - notify-db
-      - notify-api
-
-  notify-api:
-    build: notify_api
-    ports:
-      - "8000:8000"
-    command: uvicorn main:app --host 0.0.0.0 --reload
-    volumes:
-      - ./notify_api:/app
-    depends_on:
-      - rabbit
-    <<: *x-env
-
-  worker:
-    build: ./senders
-    command: celery -A main worker --loglevel=info
-    volumes:
-      - ./senders:/app
-    depends_on:
-      - notify-api
-      - rabbit
-    <<: *x-env
 
   rabbit:
     image: rabbitmq:latest
@@ -97,11 +57,6 @@ services:
     volumes:
       - postgresdata:/var/lib/postgresql/data
     restart: on-failure
-
-
-volumes:
-  postgresdata:
-    <<: *x-env
 
 volumes:
   postgresdata:
