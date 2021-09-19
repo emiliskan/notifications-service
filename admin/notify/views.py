@@ -20,7 +20,7 @@ class SendEmail(FormView):
         if form.is_valid():
             data = form.cleaned_data
             print(data)
-            celery.send_task('send_email', list(data.values()))
+            # celery.send_task('send_email', list(data.values()))
             return self.form_valid(form)
 
         return self.form_invalid(form)

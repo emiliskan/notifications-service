@@ -4,11 +4,21 @@ from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 
 
+class MessageTemplateType(models.TextChoices):
+    email = 'email'
+    sms = 'sms'
+    websocket = 'websocket'
+
+
 class MessageTemplate(TimeStampedModel):
     id = models.UUIDField(_('id'), primary_key=True, default=uuid.uuid4(), editable=False)
-    title = models.CharField(_('название'), max_length=255)
-    description = models.TextField(_('описание'), blank=True)
-    body = models.TextField(_(''), blank=True)
+    channel = models.CharField(_('способ связи'),  max_length=20,
+                               choices=MessageTemplateType.choices,
+                               default=MessageTemplateType.email)
+    type = models.CharField(_('тип сообщения'), max_length=80)
+    title = models.CharField(_('название'), max_length=80)
+    description = models.CharField(_('описание'), max_length=255, blank=True)
+    body = models.TextField(_('шаблон'))
 
     class Meta:
         verbose_name = _('шаблон')
@@ -18,13 +28,21 @@ class MessageTemplate(TimeStampedModel):
     def __str__(self):
         return self.title
 
-class NotifyHistory(TimeStampedModel):
+
+# TODO set all fields editable=False
+class NotifyHistory(models.Model):
     id = models.UUIDField(_('id'), primary_key=True, default=uuid.uuid4(), editable=False)
-    notification_id = models.CharField(_('идентификатор оповещения'), max_length=255)
+    service = models.CharField(_('источник'), max_length=80, null=True)
+    channel = models.CharField(_('способ связи'),  max_length=20,
+                               choices=MessageTemplateType.choices,
+                               default=MessageTemplateType.email)
+    type = models.CharField(_('тип сообщения'), max_length=80, null=True)
+    send_time = models.DateField(_('дата отправки'), null=True)
+    body = models.TextField(_('текст сообщения'), blank=True)
 
     class Meta:
         verbose_name = _('история оповещений')
-        verbose_name_plural = _('история оповешений')
+        verbose_name_plural = _('история оповещений')
 
     def __str__(self):
-        return self.title
+        return self.service
