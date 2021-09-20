@@ -11,14 +11,14 @@ services:
     depends_on:
       - rabbit
     env_file:
-      - env
+      - .env
 
   rabbit:
     image: rabbitmq:latest
     ports:
       - 5672:5672
     env_file:
-      - env
+      - .env
 
   notify-db:
     image: postgres:13.2-alpine
@@ -28,7 +28,7 @@ services:
       - postgresdata:/var/lib/postgresql/data
     restart: on-failure
     env_file:
-      - env
+      - .env
 
 volumes:
   postgresdata:

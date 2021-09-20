@@ -13,4 +13,4 @@ class SMSNotificator(BaseNotificator):
         print(body)
 
 
-sms_notificator = SMSNotificator()
+# sms_notificator = SMSNotificator()
