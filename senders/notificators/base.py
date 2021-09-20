@@ -13,17 +13,16 @@ class BaseNotificator(abc.ABC):
     def _send(self, **kwargs):
         pass
 
-    def get_template(self, message_type: str, channel: str) -> Template:
+    def get_metadata(self, message_type: str, channel: str) -> (Template, str):
         cursor = self.conn.cursor()
-        query = f"SELECT template FROM  {self.template} WHERE VALUES (%s, %s)"
+        query = f"SELECT body, sender FROM {self.template} WHERE type = %s AND channel = %s"
         cursor.execute(query, (message_type, channel))
-        template = cursor.cur.fetchone()
+        template, sender = cursor.fetchone()
         cursor.close()
-        return Template(template)
+        return Template(template), sender
 
-    def render_message(self, message_type: str, channel: str,
-                       payload: dict) -> str:
-        template = self.get_template(message_type, channel)
+    @staticmethod
+    def render_message(template: Template, payload: dict) -> str:
         return template.render(**payload)
 
     def _save_history(self, service: str, msg_type: str):
@@ -34,4 +33,4 @@ class BaseNotificator(abc.ABC):
 
     def send(self, **kwargs):
         self._send(**kwargs)
-        self._save_history(kwargs['service'], kwargs['type'])
+        # self._save_history(kwargs['service'], kwargs['type'])
