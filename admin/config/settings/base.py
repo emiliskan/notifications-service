@@ -70,7 +70,7 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=public'
         },
-        'NAME': os.environ.get('POSTGRES_DBNAME', 'postgres'),
+        'NAME': os.environ.get('POSTGRES_DBNAME', 'notify'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
         'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
