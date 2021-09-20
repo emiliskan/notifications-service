@@ -12,5 +12,3 @@ class SMSNotificator(BaseNotificator):
         body = self.render_message(message_type, channel, payload)
         print(body)
 
-
-sms_notificator = SMSNotificator()
