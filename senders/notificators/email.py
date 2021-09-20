@@ -1,7 +1,7 @@
 from .base import BaseNotificator
 
-
 # TODO add SanGrid
+
 
 class EmailNotificator(BaseNotificator):
 
@@ -9,5 +9,8 @@ class EmailNotificator(BaseNotificator):
         message_type = kwargs.get("type")
         channel = kwargs.get("channel")
         payload = kwargs.get("payload")
-        body = self.render_message(message_type, channel, payload)
+
+        template, sender = self.get_metadata(message_type, channel)
+        body = self.render_message(template, payload)
+        print(f'from {sender}')
         print(body)

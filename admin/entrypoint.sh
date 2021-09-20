@@ -14,6 +14,6 @@ fi
 python manage.py flush --no-input
 python manage.py collectstatic --no-input
 python manage.py migrate
-
+python manage.py loaddata ./dumps/message_template.json
 gunicorn --bind 0.0.0.0:8001 --reload -w 4 config.wsgi:application
 
