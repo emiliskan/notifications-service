@@ -19,8 +19,15 @@ class SendEmail(FormView):
 
         if form.is_valid():
             data = form.cleaned_data
-            print(data)
-            celery.send_task('send_email', list(data.values()))
+            task_args = {
+              "service": "admin",
+              "channel": data["channel"],
+              "type": data["type"],
+              "payload": {
+                "user_id": data["user_id"]
+              }
+            }
+            celery.send_task(data["channel"], kwargs=task_args)
             return self.form_valid(form)
 
         return self.form_invalid(form)

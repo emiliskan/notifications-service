@@ -86,7 +86,7 @@ DATABASES = {
         'OPTIONS': {
             'options': '-c search_path=public'
         },
-        'NAME': os.environ.get('POSTGRES_DBNAME', 'notify'),
+        'NAME': os.environ.get('POSTGRES_DB', 'notify'),
         'USER': os.environ.get('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
         'HOST': os.environ.get('POSTGRES_HOST', '127.0.0.1'),
@@ -155,14 +155,7 @@ LOGGING = {
             'formatter': 'default',
             'filters': ['require_debug_true'],
         },
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
-            'handlers': ['debug-console'],
-            'propagate': False,
-        }
-    },
+    }
 }
 
 INTERNAL_IPS = [
