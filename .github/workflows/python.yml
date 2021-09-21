@@ -36,7 +36,7 @@ jobs:
       - name: Check typing
         if: always()
         run: |
-          mypy $(git diff origin/main --name-only '*.py')
+          mypy -v $(git diff origin/main --name-only '*.py') || $(find . -type f -name "*.py")
 
       - name: Deploy to GitHub Pages
         if: always()
