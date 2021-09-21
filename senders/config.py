@@ -9,5 +9,5 @@ BD_DSN = {
     "port": os.environ.get("POSTGRES_PORT", 5432)
 }
 
-TEMPLATES = os.environ.get("TEMPLATE_TABLE", 'template_table')
+TEMPLATES = os.environ.get("TEMPLATE_TABLE", 'message_template')
 HISTORY = os.environ.get("HISTORY_TABLE", 'message_history')
