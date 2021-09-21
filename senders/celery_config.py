@@ -11,3 +11,6 @@ BD_DSN = {
 
 TEMPLATES = os.environ.get("TEMPLATE_TABLE", 'message_template')
 HISTORY = os.environ.get("HISTORY_TABLE", 'message_history')
+
+AUTH_SERVICE = os.environ.get("AUTH_SERVICE", 'auth-api')
+UGA_SERVICE = os.environ.get("UGA_SERVICE", 'uga-api')

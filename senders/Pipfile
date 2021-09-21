@@ -11,6 +11,7 @@ gunicorn = "*"
 django-celery-beat = "*"
 psycopg2-binary = "*"
 django-model-utils = "*"
+requests = "*"
 
 [dev-packages]
 

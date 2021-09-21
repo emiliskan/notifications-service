@@ -11,5 +11,18 @@
       "description": "",
       "body": "Привет {{ user_id }} ! Спасибо за регистрацию в нашем бомбическом электротеатре.\r\nДля подтверждения регистрации пройди по ссылке {{ redirectUrl }}\r\n\r\nС презрением, управление электротеатра."
     }
+  },
+  {
+    "model": "notify.messagetemplate",
+    "pk": "516bda73-5004-451d-a6b6-cab3bd6c4b15",
+    "fields": {
+      "created": "2021-09-20T19:57:58.544Z",
+      "modified": "2021-09-20T20:17:11.902Z",
+      "channel": "email",
+      "type": "top_movies",
+      "sender": "noreplay@bigbung.cc",
+      "description": "",
+      "body": "Привет {{ user_id }} ! Вот тебе топ фильмов с прошлой недели. {% for item in movies %} <li><a href=movies\"{{ item.id }}\">{{ item.name }}</a></li> {% endfor %}\r\n\r\n\r\nС презрением, управление электротеатра."
+    }
   }
 ]

@@ -1,6 +1,6 @@
 from celery import Celery
-from celery import shared_task
 
+from .alerts import TopMoviesAlert
 from .db import connect_to_db
 from .celery_config import CELERY_BROKER_URL, BD_DSN, TEMPLATES, HISTORY
 from .notificators import EmailNotificator, SMSNotificator
@@ -11,6 +11,13 @@ connection = connect_to_db(BD_DSN)
 
 email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES)
 sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
+
+top_movies_alert = TopMoviesAlert()
+
+
+@app.task(name="top_movies", acks_late=True)
+def send_top_movies():
+    top_movies_alert.send()
 
 
 @app.task(name="email", acks_late=True)
