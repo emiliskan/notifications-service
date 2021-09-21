@@ -6,7 +6,9 @@ connection = None
 
 
 def connect_to_db(dsn: dict) -> pg_conn:
-    return psycopg2.connect(**dsn, cursor_factory=DictCursor)
+    conn = psycopg2.connect(**dsn)
+    conn.autocommit = True
+    return conn
 
 
 def get_db_connection() -> pg_conn:
