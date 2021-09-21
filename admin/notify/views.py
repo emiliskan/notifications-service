@@ -24,7 +24,8 @@ class SendEmail(FormView):
               "channel": data["channel"],
               "type": data["type"],
               "payload": {
-                "user_id": data["user_id"]
+                "user_id": data["user_id"],
+                "body": data.get("body", '')
               }
             }
             celery.send_task(data["channel"], kwargs=task_args)
