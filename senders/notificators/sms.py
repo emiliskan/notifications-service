@@ -12,3 +12,4 @@ class SMSNotificator(BaseNotificator):
         body = self.render_message(template, payload)
         print(f'from {sender}')
         print(body)
+
