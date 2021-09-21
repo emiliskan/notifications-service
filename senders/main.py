@@ -1,15 +1,16 @@
 from celery import Celery
+from celery import shared_task
 
-import db
-from config import CELERY_BROKER_URL, BD_DSN, TEMPLATES, HISTORY
-from notificators import EmailNotificator, SMSNotificator
+from .db import connect_to_db
+from .celery_config import CELERY_BROKER_URL, BD_DSN, TEMPLATES, HISTORY
+from .notificators import EmailNotificator, SMSNotificator
 
 # TODO close db connection
 app = Celery("senders", broker=CELERY_BROKER_URL)
-db.connection = db.connect_to_db(BD_DSN)
+connection = connect_to_db(BD_DSN)
 
-email_notificator = EmailNotificator(db.connection, HISTORY, TEMPLATES)
-sms_notificator = SMSNotificator(db.connection, HISTORY, TEMPLATES)
+email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES)
+sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
 
 
 @app.task(name="email", acks_late=True)

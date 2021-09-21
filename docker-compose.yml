@@ -2,7 +2,7 @@ version: '3.8'
 
 x-env: &x-env
   env_file:
-  - env
+  - .env
 
 services:
 
@@ -39,19 +39,26 @@ services:
 
   worker:
     build: ./senders
-    command: celery -A main worker --loglevel=info
+    command: celery -A senders.main worker --loglevel=info
     volumes:
-      - ./senders:/app
+      - ./senders:/app/senders/
     depends_on:
       - notify-db
       - rabbit
-    <<: *x-env
+    environment:
+      - CELERY_BROKER_URL=$CELERY_BROKER_URL
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_HOST=$POSTGRES_HOST
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PORT=$POSTGRES_PORT
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
   scheduler:
     build: ./senders
-    command: celery -A celery_app beat -l INFO
+    command: celery -A senders.main beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
-      - ./senders:/app
+      - ./admin:/app/
+      - ./senders:/app/senders/
     depends_on:
       - rabbit
     <<: *x-env

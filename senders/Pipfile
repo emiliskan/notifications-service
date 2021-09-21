@@ -8,7 +8,9 @@ celery = "*"
 flower = "*"
 jinja2 = "*"
 gunicorn = "*"
-psycopg2 = "*"
+django-celery-beat = "*"
+psycopg2-binary = "*"
+django-model-utils = "*"
 
 [dev-packages]
 
