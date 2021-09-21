@@ -43,7 +43,7 @@ services:
     volumes:
       - ./senders:/app/senders/
     depends_on:
-      - notif-api
+      - notify-db
       - rabbit
     environment:
       - CELERY_BROKER_URL=$CELERY_BROKER_URL
@@ -60,7 +60,6 @@ services:
       - ./admin:/app/
       - ./senders:/app/senders/
     depends_on:
-      - notif-api
       - rabbit
     <<: *x-env
 
