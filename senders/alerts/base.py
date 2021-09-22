@@ -1,13 +1,19 @@
+import abc
+
 import requests
 from senders.celery_app import app
 from senders.celery_config import AUTH_SERVICE
 
 
-class BaseAlert:
+class BaseAlert(abc.ABC):
 
     def __init__(self, template: str, channels: list[str]):
         self.template = template
         self.channels = channels
+
+    @abc.abstractmethod
+    def send(self):
+        raise NotImplementedError
 
     def _send(self, data: dict):
 
