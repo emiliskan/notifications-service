@@ -10,7 +10,6 @@ class BaseNotificator(abc.ABC):
     def __init__(self, conn: pg_conn, history: str, template: str):
         self.conn = conn
         self.history = history
-        print(history)
         self.template = template
 
     @abc.abstractmethod
@@ -38,7 +37,6 @@ class BaseNotificator(abc.ABC):
 
     def send(self, **kwargs):
         msg = self._send(**kwargs)
-        # FIXME remove after add welcome_letter alert
-        recipient = 'alice@email.com'
+        recipient = kwargs.get("recipient")
         self._save_history(msg=msg, recipient=recipient, **kwargs)
         print('save log')

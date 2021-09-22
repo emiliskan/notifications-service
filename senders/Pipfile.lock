@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d386f939a2a53a2a2bd6e48b8617ca78f08f14d850c56d2f4538d0d72f9a2dfa"
+            "sha256": "0c9d49020da75c22cca272a7bca689d99f59950a1486362212fd7a646b247554"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -272,12 +272,27 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.8.2"
         },
+        "python-http-client": {
+            "hashes": [
+                "sha256:67e6a7bea19b03e14dc971480d3531b80becfc203d6c69478561bf7844d52661"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==3.3.2"
+        },
         "pytz": {
             "hashes": [
                 "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da",
                 "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"
             ],
             "version": "==2021.1"
+        },
+        "sendgrid": {
+            "hashes": [
+                "sha256:4ae65a2657e7b2ff01a3c67c4fcfe6ecd579783870ab09d39291ed133a69299c",
+                "sha256:75fa5094afb216bf11c60e9147c604889fa4012a3fc6ab7715fdc12e03ac488d"
+            ],
+            "index": "pypi",
+            "version": "==6.8.1"
         },
         "six": {
             "hashes": [
@@ -294,6 +309,12 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==0.4.2"
+        },
+        "starkbank-ecdsa": {
+            "hashes": [
+                "sha256:f7b434b4a1e0ba082fb1804b908b79523973fd17b1fde377078857f7cee299d1"
+            ],
+            "version": "==1.1.1"
         },
         "tornado": {
             "hashes": [
