@@ -1,6 +1,10 @@
 from django.views.generic.edit import FormView
+from django.conf import settings
+from celery import Celery
 
 from .forms import InputForm
+
+celery = Celery(broker=settings.CELERY_BROKER_URL)
 
 
 class SendEmail(FormView):

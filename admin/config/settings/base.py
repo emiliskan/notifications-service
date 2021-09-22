@@ -5,6 +5,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "pyamqp://guest:guest@localhost//")
+
 SECRET_KEY = 'gi=74g%^@#=u7$r7i$f@puz^%cw!xit=2lnt)&!+6&52^m#&3r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
