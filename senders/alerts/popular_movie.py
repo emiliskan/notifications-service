@@ -1,7 +1,7 @@
 import datetime
 import requests
 
-from .base import BaseAlert
+from senders.alerts.base import BaseAlert
 from senders.celery_config import UGA_SERVICE
 
 

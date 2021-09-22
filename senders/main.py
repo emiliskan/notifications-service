@@ -1,4 +1,7 @@
-from celery import Celery
+from requests.exceptions import ConnectionError
+
+from celery import Celery, Task
+from psycopg2 import OperationalError
 
 from .alerts import TopMoviesAlert
 from .db import connect_to_db
@@ -15,18 +18,26 @@ sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
 top_movies_alert = TopMoviesAlert("top_movies", ["email"])
 
 
-@app.task(name="top_movies", acks_late=True)
-def send_top_movies():
+class BaseTaskWithRetry(Task):
+    """ Handle connection errors."""
+
+    autoretry_for = (ConnectionError, OperationalError)
+    retry_kwargs = {'max_retries': 5}
+    retry_backoff = True
+
+
+@app.task(name="top_movies", acks_late=True, bind=True, base=BaseTaskWithRetry)
+def send_top_movies(self):
     top_movies_alert.send()
 
 
-@app.task(name="email", acks_late=True)
-def send_email(**kwargs):
+@app.task(name="email", acks_late=True, bind=True, base=BaseTaskWithRetry)
+def send_email(self, **kwargs):
     email_notificator.send(**kwargs)
 
 
-@app.task(name="sms", acks_late=True)
-def send_sms(**kwargs):
+@app.task(name="sms", acks_late=True, bind=True, base=BaseTaskWithRetry)
+def send_sms(self, **kwargs):
     sms_notificator.send(**kwargs)
 
 

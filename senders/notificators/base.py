@@ -24,7 +24,7 @@ class BaseNotificator(abc.ABC):
 
         result = cursor.fetchone()
         if not result:
-            raise TemplateNotFound
+            raise TemplateNotFound(f"Given template {message_type} not found in database!")
 
         template, sender = result
         cursor.close()
