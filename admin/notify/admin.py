@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import url
 from django.contrib.auth.models import User, Group
-from django_celery_beat.models import PeriodicTask
+from django_celery_beat.models import PeriodicTask, IntervalSchedule
 
 from .models import MessageTemplate, NotifyHistory
 from .views import SendEmail
@@ -51,3 +51,4 @@ admin_site.register(Group)
 admin_site.register(MessageTemplate)
 admin_site.register(NotifyHistory)
 admin_site.register(PeriodicTask)
+admin_site.register(IntervalSchedule)

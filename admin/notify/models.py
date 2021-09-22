@@ -20,6 +20,7 @@ class MessageTemplate(TimeStampedModel):
     id = models.UUIDField(_('id'), primary_key=True, default=uuid.uuid4(), editable=False)
     channel = CHANNEL
     type = models.CharField(_('тип сообщения'), max_length=80, default='')
+    subject = models.CharField(_('тема'), max_length=80, default='')
     sender = models.CharField(_('отправитель'), max_length=80, default='admin')
     description = models.CharField(_('описание'), max_length=255, blank=True)
     body = models.TextField(_('шаблон'))

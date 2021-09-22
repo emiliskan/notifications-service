@@ -52,6 +52,8 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PORT=$POSTGRES_PORT
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - AUTH_SERVICE=$AUTH_SERVICE
+      - UGA_SERVICE=$UGA_SERVICE
 
   scheduler:
     build: ./senders
