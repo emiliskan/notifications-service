@@ -23,5 +23,11 @@ def send_sms(**kwargs):
     sms_notificator.send(**kwargs)
 
 
+@app.on_after_finalize.connect
+def finalize(sender, **kwargs):
+    sender.close()
+    connection.close()
+
+
 if __name__ == "__main__":
     app.start()

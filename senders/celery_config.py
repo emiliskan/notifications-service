@@ -11,3 +11,4 @@ BD_DSN = {
 
 TEMPLATES = os.environ.get("TEMPLATE_TABLE", 'message_template')
 HISTORY = os.environ.get("HISTORY_TABLE", 'message_history')
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
