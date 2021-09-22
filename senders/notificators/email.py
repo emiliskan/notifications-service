@@ -1,4 +1,5 @@
-from .base import BaseNotificator
+from .base import BaseNotificator, TemplateNotFound
+
 
 # TODO add SanGrid
 
@@ -10,7 +11,11 @@ class EmailNotificator(BaseNotificator):
         channel = kwargs.get("channel")
         payload = kwargs.get("payload")
 
-        template, sender = self.get_metadata(message_type, channel)
+        try:
+            template, sender = self.get_metadata(message_type, channel)
+        except TemplateNotFound:
+            print("Template not found")
+            return
         body = self.render_message(template, payload)
         print(f'from {sender}')
         print(body)

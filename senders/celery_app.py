@@ -1,5 +1,5 @@
 from celery import Celery
-from celery_config import CELERY_BROKER_URL
+from .celery_config import CELERY_BROKER_URL
 
 app = Celery('senders', broker=CELERY_BROKER_URL)
 

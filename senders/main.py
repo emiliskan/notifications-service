@@ -12,7 +12,7 @@ connection = connect_to_db(BD_DSN)
 email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES)
 sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
 
-top_movies_alert = TopMoviesAlert()
+top_movies_alert = TopMoviesAlert("top_movies", ["email"])
 
 
 @app.task(name="top_movies", acks_late=True)

@@ -1,44 +1,43 @@
 import requests
-from celery_app import app
-from celery_config import AUTH_SERVICE
+from senders.celery_app import app
+from senders.celery_config import AUTH_SERVICE
+
 
 class BaseAlert:
 
-    template: str
+    def __init__(self, template: str, channels: list[str]):
+        self.template = template
+        self.channels = channels
 
-    def _send(self, data: dict, users: list[dict] = None):
+    def _send(self, data: dict):
 
-        if not users:
-            users = self._get_users()
+        for channel in self.channels:
+            payload = self._get_payload(channel, data)
+            app.send_task(channel, kwargs=payload)
 
-        for user in users:
-            data["user_id"] = user["id"]
-            payload = self._get_payload(data)
-            app.send_task("email", kwargs=payload)
-
-    def _get_payload(self, data: dict) -> dict:
+    def _get_payload(self, channel: str, data: dict) -> dict:
         return {
-            "service": "auth",
-            "channel": "email",
+            "service": "alert",
+            "channel": channel,
             "type": self.template,
             "payload": data
         }
 
     def _get_users(self):
 
-        # get top 10 of the week
         params = {
             "offset": 0,
             "count": 100,
-
         }
 
         offset = 0
-        data = []
-
-        while data:
+        tries = 0
+        while tries < 5:
             params["offset"] = offset
-            response = requests.get(f"{AUTH_SERVICE}/users", params=params)
+            response = requests.get(f"http://{AUTH_SERVICE}/users", params=params)
 
-            yield response.json()
+            users = response.json()
             offset += 100
+            tries += 1
+            for user in users:
+                yield user

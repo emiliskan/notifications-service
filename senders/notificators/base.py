@@ -3,6 +3,10 @@ from jinja2 import Template
 from psycopg2.extensions import connection as pg_conn
 
 
+class TemplateNotFound(Exception):
+    ...
+
+
 class BaseNotificator(abc.ABC):
     def __init__(self, conn: pg_conn, history: str, template: str):
         self.conn = conn
@@ -17,7 +21,12 @@ class BaseNotificator(abc.ABC):
         cursor = self.conn.cursor()
         query = f"SELECT body, sender FROM {self.template} WHERE type = %s AND channel = %s"
         cursor.execute(query, (message_type, channel))
-        template, sender = cursor.fetchone()
+
+        result = cursor.fetchone()
+        if not result:
+            raise TemplateNotFound
+
+        template, sender = result
         cursor.close()
         return Template(template), sender
 

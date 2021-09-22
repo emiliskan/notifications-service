@@ -1,29 +1,30 @@
 import datetime
 import requests
 
-from alerts.base import BaseAlert
-from celery_config import UGA_SERVICE
+from .base import BaseAlert
+from senders.celery_config import UGA_SERVICE
 
 
 class TopMoviesAlert(BaseAlert):
 
-    def __init__(self):
-        self.template = "top_movies"
-
     def send(self):
-        data = self._get_data()
-        self._send(data)
 
-    def _get_data(self):
+        data = self._get_top_10_movies()
+        users = self._get_users()
 
-        # get top 10 of the week
+        for user in users:
+            data["user_id"] = user["id"]
+            self._send(data)
+
+    def _get_top_10_movies(self):
+
         params = {
-            "date_start":  datetime.datetime.now(),
-            "date_end": datetime.datetime.now() - datetime.timedelta(7),
+            "date_end":  datetime.datetime.now(),
+            "date_start": datetime.datetime.now() - datetime.timedelta(7),
             "count": 10,
-
         }
-        response = requests.get(f"{UGA_SERVICE}/scores/movies/top", params=params)
+
+        response = requests.get(f"http://{UGA_SERVICE}/scores/movies/top", params=params)
 
         data = response.json()
 
