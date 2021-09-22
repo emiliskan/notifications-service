@@ -1,6 +1,9 @@
 import abc
+from datetime import datetime
+from uuid import uuid4
 from jinja2 import Template
 from psycopg2.extensions import connection as pg_conn
+import psycopg2.extras
 
 
 class TemplateNotFound(Exception):
@@ -14,32 +17,34 @@ class BaseNotificator(abc.ABC):
         self.template = template
 
     @abc.abstractmethod
-    def _send(self, **kwargs):
+    def _send(self, **kwargs) -> str:
         pass
 
     def get_metadata(self, message_type: str, channel: str) -> (Template, str):
-        cursor = self.conn.cursor()
-        query = f"SELECT body, sender FROM {self.template} WHERE type = %s AND channel = %s"
-        cursor.execute(query, (message_type, channel))
+        with self.conn.cursor() as cursor:
+            query = f"SELECT body, sender FROM {self.template} WHERE type = %s AND channel = %s"
+            cursor.execute(query, (message_type, channel))
+            result = cursor.fetchone()
+            if not result:
+                raise TemplateNotFound(f"Given template {message_type} not found in database!")
 
-        result = cursor.fetchone()
-        if not result:
-            raise TemplateNotFound(f"Given template {message_type} not found in database!")
-
-        template, sender = result
-        cursor.close()
+            template, sender = result
         return Template(template), sender
 
     @staticmethod
     def render_message(template: Template, payload: dict) -> str:
         return template.render(**payload)
 
-    def _save_history(self, service: str, msg_type: str):
-        cursor = self.conn.cursor()
-        query = f"INSERT INTO {self.history} service type VALUES (%s, %s)"
-        cursor.execute(query, (service, msg_type))
-        cursor.close()
+    def _save_history(self, service: str, channel: str, type: str, recipient: str,  msg: str, **kwargs):
+        with self.conn.cursor() as cursor:
+            psycopg2.extras.register_uuid()
+            query = f"""INSERT INTO {self.history} 
+            (id, service, channel, type, recipient, send_time, body)
+             VALUES (%s, %s, %s, %s, %s, %s, %s)"""
+            cursor.execute(query, (uuid4(), service, channel, type, recipient, datetime.now(), msg))
 
     def send(self, **kwargs):
-        self._send(**kwargs)
-        # self._save_history(kwargs['service'], kwargs['type'])
+        msg = self._send(**kwargs)
+        recipient = kwargs.get("recipient")
+        self._save_history(msg=msg, recipient=recipient, **kwargs)
+        print('save log')

@@ -10,7 +10,9 @@
   "channel": "email",
   "type": "welcome_letter",
   "payload": {
-    "user_id": "ad0ec496-8c65-42c5-8fa7-3cf17bdaca7f"
+    "user_id": "ad0ec496-8c65-42c5-8fa7-3cf17bdaca7f",
+    "name": "alice",
+    "contact": "alice@email.com"
   }
 }
 ```

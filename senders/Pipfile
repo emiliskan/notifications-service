@@ -12,6 +12,7 @@ django-celery-beat = "*"
 psycopg2-binary = "*"
 django-model-utils = "*"
 requests = "*"
+sendgrid = "*"
 
 [dev-packages]
 
