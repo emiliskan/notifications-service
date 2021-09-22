@@ -22,14 +22,14 @@ class BaseNotificator(abc.ABC):
 
     def get_metadata(self, message_type: str, channel: str) -> (Template, str):
         with self.conn.cursor() as cursor:
-            query = f"SELECT body, sender FROM {self.template} WHERE type = %s AND channel = %s"
+            query = f"SELECT body, sender, subject FROM {self.template} WHERE type = %s AND channel = %s"
             cursor.execute(query, (message_type, channel))
             result = cursor.fetchone()
             if not result:
-                raise TemplateNotFound(f"Given template {message_type} not found in database!")
+                raise TemplateNotFound(f"Given template {message_type} in {channel} not found in database!")
 
-            template, sender = result
-        return Template(template), sender
+            template, sender, subject = result
+        return Template(template), sender, subject
 
     @staticmethod
     def render_message(template: Template, payload: dict) -> str:

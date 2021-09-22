@@ -5,14 +5,17 @@ from psycopg2 import OperationalError
 
 from .alerts import TopMoviesAlert
 from .db import connect_to_db
+from .celery_app import app
 from .celery_config import CELERY_BROKER_URL, BD_DSN, TEMPLATES, HISTORY
-from .notificators import EmailNotificator, SMSNotificator
+from .notificators import EmailNotificator, SMSNotificator, SendGrid
 
-# TODO close db connection
-app = Celery("senders", broker=CELERY_BROKER_URL)
+
 connection = connect_to_db(BD_DSN)
 
-email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES)
+
+email_sender = SendGrid()
+email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES, email_sender)
+
 sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
 
 top_movies_alert = TopMoviesAlert("top_movies", ["email"])
@@ -39,12 +42,6 @@ def send_email(self, **kwargs):
 @app.task(name="sms", acks_late=True, bind=True, base=BaseTaskWithRetry)
 def send_sms(self, **kwargs):
     sms_notificator.send(**kwargs)
-
-
-@app.on_after_finalize.connect
-def finalize(sender, **kwargs):
-    sender.close()
-    connection.close()
 
 
 if __name__ == "__main__":

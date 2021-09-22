@@ -13,17 +13,18 @@ class BaseAlert(abc.ABC):
 
     @abc.abstractmethod
     def send(self):
-        raise NotImplementedError
+        pass
 
-    def _send(self, data: dict):
+    def _send(self, to: str, data: dict):
 
         for channel in self.channels:
-            payload = self._get_payload(channel, data)
+            payload = self._get_payload(to, channel, data)
             app.send_task(channel, kwargs=payload)
 
-    def _get_payload(self, channel: str, data: dict) -> dict:
+    def _get_payload(self, to: str, channel: str, data: dict) -> dict:
         return {
             "service": "alert",
+            "recipient": to,
             "channel": channel,
             "type": self.template,
             "payload": data

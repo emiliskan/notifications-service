@@ -14,7 +14,7 @@ class TopMoviesAlert(BaseAlert):
 
         for user in users:
             data["user_id"] = user["id"]
-            self._send(data)
+            self._send(user["email"], data)
 
     def _get_top_10_movies(self):
 

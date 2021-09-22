@@ -13,7 +13,7 @@ class EmailSender(ABC):
 
     @abc.abstractmethod
     def send(self, from_email: str, recipient: str, subject: str, body: str) -> None:
-        raise NotImplementedError
+        pass
 
 
 class SendGrid(EmailSender):
@@ -30,17 +30,16 @@ class SendGrid(EmailSender):
 
 class EmailNotificator(BaseNotificator):
 
-    def __init__(self, conn: pg_conn, history: str, template: str):
+    def __init__(self, conn: pg_conn, history: str, template: str, sender: EmailSender):
         super().__init__(conn, history, template)
-        self.sender = SendGrid()
+        self.sender = sender
 
     def _send(self, **kwargs) -> str:
         message_type = kwargs.get("type")
         channel = kwargs.get("channel")
         payload = kwargs.get("payload")
         recipient = kwargs.get("recipient")
-        subject = kwargs.get("subject")
-        template, from_email = self.get_metadata(message_type, channel)
+        template, from_email, subject = self.get_metadata(message_type, channel)
         body = self.render_message(template, payload)
 
         self.sender.send(from_email, recipient, subject, body)
