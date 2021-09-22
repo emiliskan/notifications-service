@@ -1,0 +1,57 @@
+@startuml
+<style>
+    package {
+        RoundCorner 10
+    }
+    component {
+        RoundCorner 10
+    }
+    arrow {
+      LineThickness 1.5
+    }
+</style>
+actor Клиент as Client
+
+package FilmService as FS {
+    component Nginx
+
+    package "Admin Panel" as AP {
+        component Django
+    }
+
+    package "UGC" as UGC {
+        component ugcAPI
+    }
+
+
+    package "Notifications" as Notifications {
+        database RabbitMQ
+        database NotificationsDB
+        component NotifAPI
+        component NotifAdmin
+        component CeleryWorker
+        component CeleryBeat
+
+    }
+}
+
+left to right direction
+Client --> Nginx
+
+NotifAdmin --> NotifAPI: Отправить письмо
+NotifAdmin --> NotificationsDB: Управление шаблонами
+NotifAdmin --> CeleryBeat: Периодические задачи
+CeleryBeat --> RabbitMQ: Периодические рассылки
+NotifAPI --> RabbitMQ: Отправить письмо
+CeleryWorker --> NotificationsDB: Сохранить историю
+NotificationsDB --> CeleryWorker: Получить шаблон
+RabbitMQ --> CeleryWorker : Выполнить
+
+UGC --> NotifAPI: Отправить письмо
+AP --> NotifAPI
+
+Nginx --> Django: Панель администратора
+Nginx --> ugcAPI: Пользовательский контент
+
+
+@enduml
