@@ -8,7 +8,7 @@ RUN apt update && apt -y upgrade && apt install -y python3-setuptools\
 
 RUN mkdir /app
 WORKDIR /app/
-COPY . .
+COPY Pipfile Pipfile.lock/ /app/
 
 RUN pipenv install --system --deploy --skip-lock
-ENTRYPOINT ["uvicorn", "main:app", "--port", "8000", "--host", "0.0.0.0"]
+ENTRYPOINT ["uvicorn", "main:app", "--port", "8000", "--host", "0.0.0.0", "--reload"]

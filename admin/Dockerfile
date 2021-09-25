@@ -8,7 +8,7 @@ RUN apt update && apt -y upgrade && apt install -y netcat postgresql-client\
 
 RUN mkdir /app
 WORKDIR /app/
-COPY . .
+COPY Pipfile Pipfile.lock/ /app/
 RUN pipenv install --system --deploy --skip-lock
 
 # run entrypoint.sh
