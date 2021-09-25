@@ -1,6 +1,5 @@
 import abc
-from datetime import datetime
-from uuid import uuid4
+import logging
 from jinja2 import Template
 from psycopg2.extensions import connection as pg_conn
 import psycopg2.extras
@@ -49,4 +48,4 @@ class BaseNotificator(abc.ABC):
         msg = self._send(**kwargs)
         print(kwargs)
         self._save_history(msg=msg, **kwargs)
-        print('save log')
+        logging.info("sent notification")
