@@ -4,15 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-celery = "*"
-flower = "*"
-jinja2 = "*"
-gunicorn = "*"
-django-celery-beat = "*"
-psycopg2-binary = "*"
-django-model-utils = "*"
-requests = "*"
-sendgrid = "*"
+celery = "5.1.2"
+flower = "1.0.0"
+jinja2 = "3.0.1"
+gunicorn = "20.1.0"
+django-celery-beat = "2.2.1"
+psycopg2-binary = "2.9.1"
+django-model-utils = "2.2.1"
+requests = "2.26.0"
+sendgrid = "6.8.1"
 
 [dev-packages]
 

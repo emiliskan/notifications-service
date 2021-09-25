@@ -4,12 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-celery = "*"
-psycopg2-binary = "*"
-gunicorn = "*"
-django-model-utils = "*"
-django-celery-beat = "*"
+django = "3.2.7"
+celery = "5.1.2"
+psycopg2-binary = "2.9.1"
+gunicorn = "20.1.0"
+django-model-utils = "4.1.1"
+django-celery-beat = "2.2.1"
 
 [dev-packages]
 
