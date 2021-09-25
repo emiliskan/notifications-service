@@ -24,8 +24,11 @@ class SendGrid(EmailSender):
             to_emails=recipient,
             subject=subject,
             html_content=body)
-        sg = SendGridAPIClient(SENDGRID_API_KEY)
-        sg.send(message)
+        try:
+            sg = SendGridAPIClient(SENDGRID_API_KEY)
+            sg.send(message)
+        except:
+            pass
 
 
 class EmailNotificator(BaseNotificator):

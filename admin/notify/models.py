@@ -42,6 +42,7 @@ class NotifyHistory(models.Model):
     type = models.CharField(_('тип сообщения'), max_length=80, default='email')
     recipient = models.CharField(_('получатель'), max_length=80, default='nobody@email.com')
     send_time = models.DateTimeField(_('дата отправки'), default=datetime.now)
+    subject = models.CharField(_('тема'), max_length=80, default='', blank=True)
     body = models.TextField(_('текст сообщения'))
 
     class Meta:
