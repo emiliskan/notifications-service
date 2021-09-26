@@ -1,19 +1,30 @@
 import abc
 import logging
+
 from jinja2 import Template
 from psycopg2.extensions import connection as pg_conn
 import psycopg2.extras
+
+from ..celery_config import LOGGER_NAME
+
+logger = logging.getLogger(LOGGER_NAME)
 
 
 class TemplateNotFound(Exception):
     ...
 
 
+class BaseSender(abc.ABC):
+    def send(self, *args, **kwargs) -> None:
+        pass
+
+
 class BaseNotificator(abc.ABC):
-    def __init__(self, conn: pg_conn, history: str, template: str):
+    def __init__(self, conn: pg_conn, history: str, template: str, sender: BaseSender):
         self.conn = conn
         self.history = history
         self.template = template
+        self.sender = sender
 
     @abc.abstractmethod
     def _send(self, **kwargs) -> str:
@@ -34,18 +45,17 @@ class BaseNotificator(abc.ABC):
     def render_message(template: Template, payload: dict) -> str:
         return template.render(**payload)
 
-    def _save_history(self, service: str, channel: str, type: str, recipient: str,  msg: str, subject: str, **kwargs):
+    def _save_history(self, service: str, channel: str, type: str, recipient: str,
+                      msg: str, subject: str, **kwargs):
         with self.conn.cursor() as cursor:
             psycopg2.extras.register_uuid()
             query = f"""INSERT INTO {self.history} 
              (service, channel, type, recipient, subject, body)
              VALUES (%s, %s, %s, %s, %s)"""
-
-            print((service, channel, type, recipient, subject, msg))
             cursor.execute(query, (service, channel, type, recipient, subject, msg))
 
     def send(self, **kwargs):
         msg = self._send(**kwargs)
-        print(kwargs)
-        self._save_history(msg=msg, **kwargs)
-        logging.info("sent notification")
+        recipient = kwargs.get("recipient")
+        self._save_history(msg=msg, recipient=recipient, **kwargs)
+        logger.info(f"message for {recipient} is registered in db")

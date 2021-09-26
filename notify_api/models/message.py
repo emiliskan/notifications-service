@@ -14,6 +14,7 @@ class Service(str, Enum):
 class Channel(str, Enum):
     # Yes, it isn't best idea to leave it in production
     email = "email"
+    sms = "sms"
     mock = "mock"
 
 
