@@ -10,7 +10,6 @@ services:
     build: ./notify_api
     ports:
       - "8000:8000"
-    command: uvicorn main:app --host 0.0.0.0 --reload
     volumes:
       - ./notify_api:/app
     depends_on:

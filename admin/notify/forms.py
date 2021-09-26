@@ -6,8 +6,10 @@ CHANNEL_CHOICES = (('email', 'email'),)
 
 
 class InputForm(forms.Form):
-    user_id = forms.CharField(max_length=250, required=True)
     channel = forms.CharField(widget=forms.Select(choices=CHANNEL_CHOICES), required=True)
+    recipient = forms.CharField(widget=forms.TextInput, required=False, max_length=250)
+    subject = forms.CharField(widget=forms.TextInput, required=False, max_length=250)
+    user_id = forms.CharField(max_length=250, required=True)
     body = forms.CharField(widget=forms.Textarea, required=False)
 
     def __init__(self, *args, **kwargs):

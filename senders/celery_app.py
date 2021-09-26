@@ -1,10 +1,8 @@
 from celery import Celery
-from .celery_config import CELERY_BROKER_URL
+from .celery_config import CELERY_BROKER_URL, POSTGRES_URI
 
 app = Celery('senders', broker=CELERY_BROKER_URL)
 
-beat_dburi = 'postgresql+psycopg2://postgres:postgres@notify_db:5432/postgres'
-
 app.conf.update(
-    {'beat_dburi': beat_dburi}
+    {'beat_dburi': POSTGRES_URI}
 )

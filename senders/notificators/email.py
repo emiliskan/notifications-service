@@ -28,6 +28,7 @@ class SendGrid(EmailSender):
         sg.send(message)
 
 
+
 class EmailNotificator(BaseNotificator):
 
     def __init__(self, conn: pg_conn, history: str, template: str, sender: EmailSender):

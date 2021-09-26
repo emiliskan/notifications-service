@@ -16,3 +16,11 @@ AUTH_SERVICE = os.environ.get("AUTH_SERVICE", 'auth-api')
 UGA_SERVICE = os.environ.get("UGA_SERVICE", 'uga-api')
 
 SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+
+POSTGRES_DB = os.environ.get('POSTGRES_DB', 'postgres')
+POSTGRES_HOST = os.environ.get('POSTGRES_HOST', "localhost")
+POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
+POSTGRES_PORT = os.environ.get('POSTGRES_PORT', 5432)
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', 'postgres')
+
+POSTGRES_URI = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}'

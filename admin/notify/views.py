@@ -20,13 +20,15 @@ class SendEmail(FormView):
         if form.is_valid():
             data = form.cleaned_data
             task_args = {
-              "service": "admin",
-              "channel": data["channel"],
-              "type": data["type"],
-              "payload": {
-                "user_id": data["user_id"],
-                "body": data.get("body", '')
-              }
+                "service": "admin",
+                "channel": data["channel"],
+                "type": data["type"],
+                "subject": data["subject"],
+                "recipient": data["recipient"],
+                "payload": {
+                    "user_id": data["user_id"],
+                    "body": data.get("body", '')
+                }
             }
             celery.send_task(data["channel"], kwargs=task_args)
             return self.form_valid(form)
