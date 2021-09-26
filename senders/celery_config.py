@@ -1,7 +1,7 @@
 import os
 import pathlib
 
-import logging
+import logging.config as logging_config
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "pyamqp://guest:guest@localhost//")
 BD_DSN = {
@@ -26,10 +26,11 @@ POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
 POSTGRES_PORT = os.environ.get('POSTGRES_PORT', 5432)
 POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', 'postgres')
 
-POSTGRES_URI = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}'
+POSTGRES_DB_URL = f"{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+POSTGRES_URI = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_DB_URL}'
 
 DEBUG = os.environ.get('DEBUG', False)
 
 LOGGER_CONFIG = pathlib.Path(__file__).parent / 'logging.conf'
 LOGGER_NAME = 'senders'
-logging.config.fileConfig(LOGGER_CONFIG)
+logging_config.fileConfig(LOGGER_CONFIG)

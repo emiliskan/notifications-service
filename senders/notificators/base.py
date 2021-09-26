@@ -53,9 +53,9 @@ class BaseNotificator(abc.ABC):
              (service, channel, type, recipient, subject, body)
              VALUES (%s, %s, %s, %s, %s)"""
             cursor.execute(query, (service, channel, type, recipient, subject, msg))
+            logger.info(f"message for {recipient} is registered in db")
 
     def send(self, **kwargs):
         msg = self._send(**kwargs)
         recipient = kwargs.get("recipient")
         self._save_history(msg=msg, recipient=recipient, **kwargs)
-        logger.info(f"message for {recipient} is registered in db")
