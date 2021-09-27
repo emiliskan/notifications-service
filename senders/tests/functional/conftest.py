@@ -2,7 +2,7 @@ import pytest
 
 from senders.db import connect_to_db
 from .settings import BD_DSN, TEMPLATES, HISTORY
-from senders.notificators import MockSender, EmailNotificator, SMSNotificator
+from senders.notificators import MockSender
 
 
 @pytest.fixture()
