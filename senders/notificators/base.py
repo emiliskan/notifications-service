@@ -56,9 +56,11 @@ class BaseNotificator(abc.ABC):
             query = f"""INSERT INTO {self.history} 
              (id, send_time, service, channel, type, recipient, subject, body)
              VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-            logger.info((service, channel, type, recipient, subject, msg))
             cursor.execute(query, (id, time, service, channel, type, recipient, subject, msg))
             logger.info(f"message for {recipient} is registered in db")
 
     def send(self, **kwargs):
-        self._save_history(msg=kwargs.get("body"), **kwargs)
+        msg = self._send(**kwargs)
+        kwargs.update({"msg": msg})
+        self._save_history(**kwargs)
+        return kwargs

@@ -9,6 +9,15 @@
 
   },
   {
+    "channel": "sms",
+    "type": "auth_sms",
+    "subject": "2FA",
+    "sender": "4422",
+    "description": "",
+    "body": "Добрый день, {{name}}! Ваш код для входа в учетную запись: 211DB3"
+
+  },
+  {
     "channel": "email",
     "type": "top_movies",
     "subject": "Watch us now!",

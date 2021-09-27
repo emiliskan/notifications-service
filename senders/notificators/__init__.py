@@ -1,4 +1,4 @@
 from .email import EmailNotificator, SendGrid
 from .sms import SMSNotificator
-from .base import TemplateNotFound, BaseSender
+from .base import TemplateNotFound, BaseSender, BaseNotificator
 from .mock import MockNotificator, MockSender
