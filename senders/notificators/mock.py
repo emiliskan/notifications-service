@@ -23,7 +23,11 @@ class MockNotificator(BaseNotificator):
         recipient = kwargs.get("recipient")
         template, sender, subject = self.get_metadata(message_type, channel)
         body = self.render_message(template, payload)
-
         self.sender.send(sender, recipient, subject, body)
-        return body
+        return sender, recipient, subject, body
+
+    def send(self, **kwargs):
+        handeled_data = self._send(**kwargs)
+        logger.info(handeled_data)
+        return handeled_data
 
