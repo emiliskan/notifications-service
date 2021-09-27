@@ -1,5 +1,7 @@
 import abc
+import datetime
 import logging
+import uuid
 
 from jinja2 import Template
 from psycopg2.extensions import connection as pg_conn
@@ -49,13 +51,14 @@ class BaseNotificator(abc.ABC):
                       msg: str, subject: str, **kwargs):
         with self.conn.cursor() as cursor:
             psycopg2.extras.register_uuid()
+            id = uuid.uuid4()
+            time = datetime.datetime.now()
             query = f"""INSERT INTO {self.history} 
-             (service, channel, type, recipient, subject, body)
-             VALUES (%s, %s, %s, %s, %s)"""
-            cursor.execute(query, (service, channel, type, recipient, subject, msg))
+             (id, send_time, service, channel, type, recipient, subject, body)
+             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+            logger.info((service, channel, type, recipient, subject, msg))
+            cursor.execute(query, (id, time, service, channel, type, recipient, subject, msg))
             logger.info(f"message for {recipient} is registered in db")
 
     def send(self, **kwargs):
-        msg = self._send(**kwargs)
-        recipient = kwargs.get("recipient")
-        self._save_history(msg=msg, recipient=recipient, **kwargs)
+        self._save_history(msg=kwargs.get("body"), **kwargs)
