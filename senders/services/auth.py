@@ -18,7 +18,7 @@ class AuthService:
 
         offset = 0
         tries = 0
-        while tries < 5:
+        while True:
             params["offset"] = offset
 
             try:
