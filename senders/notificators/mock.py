@@ -1,4 +1,5 @@
 from .base import BaseNotificator, BaseSender, logger
+from ..models import Notification, SentResult
 
 
 class MockSender(BaseSender):
@@ -16,15 +17,18 @@ class MockSender(BaseSender):
 
 class MockNotificator(BaseNotificator):
 
-    def _send(self, **kwargs):
-        message_type = kwargs.get("type")
-        channel = kwargs.get("channel")
-        payload = kwargs.get("payload")
-        recipient = kwargs.get("recipient")
-        template, sender, subject = self.get_metadata(message_type, channel)
-        body = self.render_message(template, payload)
-        self.sender.send(sender, recipient, subject, body)
-        return sender, recipient, subject, body
+    def _send(self, data: Notification) -> SentResult:
+        notification_metadata = self.get_metadata(data.type, data.channel)
+        body = self.render_message(notification_metadata.template, data.payload)
+
+        self.sender.send(
+            notification_metadata.sender,
+            data.recipient,
+            notification_metadata.subject,
+            body
+        )
+
+        return SentResult(**data.__dict__, **notification_metadata.__dict__, body=body)
 
     def send(self, **kwargs):
         handeled_data = self._send(**kwargs)

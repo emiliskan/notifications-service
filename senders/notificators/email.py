@@ -10,14 +10,7 @@ from .base import BaseNotificator, BaseSender
 from senders.celery_config import SENDGRID_API_KEY
 
 
-class EmailSender(BaseSender):
-
-    @abc.abstractmethod
-    def send(self, from_email: str, recipient: str, subject: str, body: str) -> None:
-        pass
-
-
-class SendGrid(EmailSender):
+class SendGrid(BaseSender):
 
     def send(self, from_email: str, recipient: str, subject: str, body: str):
         message = Mail(
@@ -27,12 +20,6 @@ class SendGrid(EmailSender):
             html_content=body)
         sg = SendGridAPIClient(SENDGRID_API_KEY)
         sg.send(message)
-
-
-class MockSender(EmailSender):
-
-    def send(self, from_email: str, recipient: str, subject: str, body: str):
-        print('we can imagine everything')
 
 
 class EmailNotificator(BaseNotificator):

@@ -63,4 +63,4 @@ class BaseNotificator(abc.ABC):
         sent_result = self._send(data)
         self._save_history(sent_result)
 
-        logging.info("sent notification")
+        logger.info("sent notification")
