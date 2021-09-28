@@ -6,13 +6,22 @@ import psycopg2.extras
 
 from senders.models import Notification, NotificationMetadata, SentResult
 from senders.notificators.exceptions import SaveHistory, TemplateNotFound, GetMetadata
+from ..celery_config import LOGGER_NAME
+
+logger = logging.getLogger(LOGGER_NAME)
+
+
+class BaseSender(abc.ABC):
+    def send(self, *args, **kwargs) -> None:
+        pass
 
 
 class BaseNotificator(abc.ABC):
-    def __init__(self, conn: pg_conn, history: str, template: str):
+    def __init__(self, conn: pg_conn, history: str, template: str, sender: BaseSender):
         self.conn = conn
         self.history = history
         self.template = template
+        self.sender = sender
 
     @abc.abstractmethod
     def _send(self, data: Notification) -> SentResult:

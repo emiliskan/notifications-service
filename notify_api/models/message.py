@@ -12,11 +12,15 @@ class Service(str, Enum):
 
 
 class Channel(str, Enum):
+    # Yes, it isn't best idea to leave it in production
     email = "email"
+    sms = "sms"
+    mock = "mock"
 
 
 class MessageType(str, Enum):
     welcome_letter = "welcome_letter"
+    mock_letter = "mock_letter"
 
 
 example_payload = {

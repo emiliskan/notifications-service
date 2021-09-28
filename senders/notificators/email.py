@@ -1,5 +1,4 @@
 import abc
-from abc import ABC
 
 from psycopg2.extensions import connection as pg_conn
 from sendgrid import SendGridAPIClient
@@ -7,10 +6,11 @@ from sendgrid.helpers.mail import Mail
 
 from senders.models import Notification, SentResult
 from senders.notificators.base import BaseNotificator
+from .base import BaseNotificator, BaseSender
 from senders.celery_config import SENDGRID_API_KEY
 
 
-class EmailSender(ABC):
+class EmailSender(BaseSender):
 
     @abc.abstractmethod
     def send(self, from_email: str, recipient: str, subject: str, body: str) -> None:
@@ -36,10 +36,6 @@ class MockSender(EmailSender):
 
 
 class EmailNotificator(BaseNotificator):
-
-    def __init__(self, conn: pg_conn, history: str, template: str, sender: EmailSender):
-        super().__init__(conn, history, template)
-        self.sender = sender
 
     def _send(self, data: Notification) -> SentResult:
         notification_metadata = self.get_metadata(data.type, data.channel)
