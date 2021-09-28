@@ -5,7 +5,8 @@ from psycopg2.extensions import connection as pg_conn
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-from .base import BaseNotificator
+from senders.models import Notification, SentResult
+from senders.notificators.base import BaseNotificator
 from senders.celery_config import SENDGRID_API_KEY
 
 
@@ -28,21 +29,22 @@ class SendGrid(EmailSender):
         sg.send(message)
 
 
-
 class EmailNotificator(BaseNotificator):
 
     def __init__(self, conn: pg_conn, history: str, template: str, sender: EmailSender):
         super().__init__(conn, history, template)
         self.sender = sender
 
-    def _send(self, **kwargs) -> str:
-        message_type = kwargs.get("type")
-        channel = kwargs.get("channel")
-        payload = kwargs.get("payload")
-        recipient = kwargs.get("recipient")
-        template, from_email, subject = self.get_metadata(message_type, channel)
-        body = self.render_message(template, payload)
+    def _send(self, data: Notification) -> SentResult:
 
-        self.sender.send(from_email, recipient, subject, body)
+        notification_metadata = self.get_metadata(data.type, data.channel)
+        body = self.render_message(notification_metadata.template, data.payload)
 
-        return body
+        self.sender.send(
+            notification_metadata.sender,
+            data.recipient,
+            notification_metadata.subject,
+            body
+        )
+
+        return SentResult(**data.__dict__, body=body)
