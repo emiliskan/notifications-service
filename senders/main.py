@@ -1,7 +1,8 @@
-from requests.exceptions import ConnectionError
 
-from celery import Celery, Task
-from psycopg2 import OperationalError
+from celery import Task
+
+from senders.models import Notification
+from senders.services.ugc import UGCUnavailable, UGCServiceMock
 
 from senders.services.auth import AuthUnavailable, AuthServiceMock
 from senders.notificators.exceptions import GetMetadata
@@ -21,7 +22,9 @@ email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES, email_sende
 
 sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)
 
-top_movies_alert = TopMoviesAlert("top_movies", ["email"])
+auth_service = AuthServiceMock()
+ugc_service = UGCServiceMock()
+top_movies_alert = TopMoviesAlert("top_movies", ["email"], auth_service, ugc_service)
 
 
 class BaseTaskWithRetry(Task):
@@ -39,7 +42,7 @@ def send_top_movies(self):
 
 @app.task(name="email", bind=True, base=BaseTaskWithRetry)
 def send_email(self, **kwargs):
-    email_notificator.send(**kwargs)
+    email_notificator.send(Notification(**kwargs))
 
 
 @app.task(name="sms", bind=True, base=BaseTaskWithRetry)

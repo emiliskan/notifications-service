@@ -1,21 +1,23 @@
 import abc
 
-import requests
 from senders.celery_app import app
-from senders.celery_config import AUTH_SERVICE
+from senders.services.auth import AuthServiceBase
+from senders.services.ugc import UGCServiceBase
 
 
 class BaseAlert(abc.ABC):
 
-    def __init__(self, template: str, channels: list[str]):
+    def __init__(self, template: str, channels: list[str], auth_service: AuthServiceBase, ugc_service: UGCServiceBase):
         self.template = template
         self.channels = channels
+        self.auth_service = auth_service
+        self.ugc_service = ugc_service
 
     @abc.abstractmethod
     def send(self):
         pass
 
-    def _send(self, to: str, data: dict):
+    def _send(self, to: str, data: dict) -> None:
 
         for channel in self.channels:
             payload = self._get_payload(to, channel, data)
@@ -30,21 +32,3 @@ class BaseAlert(abc.ABC):
             "payload": data
         }
 
-    def _get_users(self):
-
-        params = {
-            "offset": 0,
-            "count": 100,
-        }
-
-        offset = 0
-        tries = 0
-        while tries < 5:
-            params["offset"] = offset
-            response = requests.get(f"http://{AUTH_SERVICE}/users", params=params)
-
-            users = response.json()
-            offset += 100
-            tries += 1
-            for user in users:
-                yield user
