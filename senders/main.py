@@ -2,6 +2,7 @@
 from celery import Task
 
 from senders.models import Notification
+from senders.notificators.email import MockSender
 from senders.services.ugc import UGCUnavailable, UGCServiceMock
 
 from senders.services.auth import AuthUnavailable, AuthServiceMock
@@ -17,7 +18,7 @@ from senders.notificators import EmailNotificator, SMSNotificator, SendGrid
 connection = connect_to_db(BD_DSN)
 
 
-email_sender = SendGrid()
+email_sender = MockSender()
 email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES, email_sender)
 
 sms_notificator = SMSNotificator(connection, HISTORY, TEMPLATES)

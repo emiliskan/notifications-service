@@ -29,6 +29,12 @@ class SendGrid(EmailSender):
         sg.send(message)
 
 
+class MockSender(EmailSender):
+
+    def send(self, from_email: str, recipient: str, subject: str, body: str):
+        print('we can imagine everything')
+
+
 class EmailNotificator(BaseNotificator):
 
     def __init__(self, conn: pg_conn, history: str, template: str, sender: EmailSender):
@@ -36,7 +42,6 @@ class EmailNotificator(BaseNotificator):
         self.sender = sender
 
     def _send(self, data: Notification) -> SentResult:
-
         notification_metadata = self.get_metadata(data.type, data.channel)
         body = self.render_message(notification_metadata.template, data.payload)
 
@@ -47,4 +52,4 @@ class EmailNotificator(BaseNotificator):
             body
         )
 
-        return SentResult(**data.__dict__, body=body)
+        return SentResult(**data.__dict__, **notification_metadata.__dict__, body=body)
