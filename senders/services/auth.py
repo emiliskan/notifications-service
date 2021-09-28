@@ -1,4 +1,3 @@
-import abc
 import requests
 
 from senders.celery_config import AUTH_SERVICE
@@ -8,15 +7,7 @@ class AuthUnavailable(Exception):
     ...
 
 
-class AuthServiceBase(abc.ABC):
-
-    @staticmethod
-    @abc.abstractmethod
-    def get_users():
-        pass
-
-
-class AuthService(AuthServiceBase):
+class AuthService:
 
     @staticmethod
     def get_users():
@@ -40,13 +31,3 @@ class AuthService(AuthServiceBase):
             tries += 1
             for user in users:
                 yield user
-
-
-class AuthServiceMock(AuthServiceBase):
-
-    @staticmethod
-    def get_users():
-        return [
-            {'id': 1, 'email': 'me@sobaka.com'},
-            {'id': 2, 'email': 'you@sobaka.com'},
-        ]

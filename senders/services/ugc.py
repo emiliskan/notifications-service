@@ -1,4 +1,3 @@
-import abc
 import requests
 import datetime
 
@@ -9,15 +8,7 @@ class UGCUnavailable(Exception):
     ...
 
 
-class UGCServiceBase(abc.ABC):
-
-    @staticmethod
-    @abc.abstractmethod
-    def get_top_10_movies():
-        pass
-
-
-class UGCService(UGCServiceBase):
+class UGCService:
 
     @staticmethod
     def get_top_10_movies():
@@ -37,14 +28,3 @@ class UGCService(UGCServiceBase):
 
         return {"movies": data}
 
-
-class UGCServiceMock(UGCServiceBase):
-
-    @staticmethod
-    def get_top_10_movies():
-        return {
-            "movies": [
-                {'id': 1, 'name': 'Duna'},
-                {'id': 2, 'name': 'Duna 2'},
-            ]
-        }

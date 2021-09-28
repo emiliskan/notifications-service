@@ -2,22 +2,22 @@
 from celery import Task
 
 from senders.models import Notification
-from senders.services.ugc import UGCUnavailable, UGCServiceMock
-
-from senders.services.auth import AuthUnavailable, AuthServiceMock
-from senders.notificators.exceptions import GetMetadata
-
-from senders.alerts import TopMoviesAlert
+from senders.mock import MockNotificator, MockSender, AuthServiceMock, UGCServiceMock
 from senders.db import connect_to_db
+
+from senders.services.ugc import UGCUnavailable
+from senders.services.auth import AuthUnavailable
+
+from senders.notificators import (EmailNotificator, SMSNotificator, SendGrid)
+from senders.notificators.exceptions import GetMetadata
+from senders.alerts import TopMoviesAlert
+
 from senders.celery_app import app
 from senders.celery_config import BD_DSN, TEMPLATES, HISTORY, DEBUG
-from senders.notificators import (EmailNotificator, SMSNotificator, SendGrid,
-                                  MockNotificator, MockSender)
-
 
 connection = connect_to_db(BD_DSN)
 
-email_sender = MockSender()
+email_sender = SendGrid()
 email_notificator = EmailNotificator(connection, HISTORY, TEMPLATES, email_sender)
 
 sms_sender = MockSender()

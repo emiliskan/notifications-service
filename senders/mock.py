@@ -1,5 +1,7 @@
-from .base import BaseNotificator, BaseSender, logger
-from ..models import Notification, SentResult
+from senders.notificators.base import BaseNotificator, BaseSender, logger
+from senders.models import Notification, SentResult
+from senders.services.auth import AuthService
+from senders.services.ugc import UGCService
 
 
 class MockSender(BaseSender):
@@ -35,3 +37,24 @@ class MockNotificator(BaseNotificator):
         logger.info(handeled_data)
         return handeled_data
 
+
+class AuthServiceMock(AuthService):
+
+    @staticmethod
+    def get_users():
+        return [
+            {'id': 1, 'email': 'me@sobaka.com'},
+            {'id': 2, 'email': 'you@sobaka.com'},
+        ]
+
+
+class UGCServiceMock(UGCService):
+
+    @staticmethod
+    def get_top_10_movies():
+        return {
+            "movies": [
+                {'id': 1, 'name': 'Duna'},
+                {'id': 2, 'name': 'Duna 2'},
+            ]
+        }
