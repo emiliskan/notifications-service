@@ -7,9 +7,10 @@ class SMSNotificator(BaseNotificator):
         message_type = kwargs.get("type")
         channel = kwargs.get("channel")
         payload = kwargs.get("payload")
-
-        template, sender = self.get_metadata(message_type, channel)
+        recipient = kwargs.get("recipient")
+        template, from_number, _ = self.get_metadata(message_type, channel)
         body = self.render_message(template, payload)
-        print(f'from {sender}')
-        print(body)
+
+        self.sender.send(from_number, recipient, body)
+        return body
 
